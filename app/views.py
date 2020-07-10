@@ -1,5 +1,6 @@
 from app import app
+from flask import render_template
 
 @app.route('/')
-def getting_started():
-    return 'From views.py'
+def landing_page():
+    return render_template('index.html')
