@@ -1,5 +1,5 @@
 import unittest
-from models import Pitch
+from app.models import Pitch
 
 class Pitch_Test(unittest.TestCase):
     '''
@@ -19,5 +19,3 @@ class Pitch_Test(unittest.TestCase):
     def test_instance(self):
         self.assertIsInstance(self.new_pitch, Pitch)
 
-if __name__ == '__main__':
-    unittest.main()

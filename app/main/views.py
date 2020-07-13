@@ -1,14 +1,14 @@
-from app import app
+from . import main
 from flask import render_template
 
-@app.route('/')
+@main.route('/')
 def landing_page():
     return render_template('index.html')
 
-@app.route('/pitches')
+@main.route('/pitches')
 def home():
     return render_template('pitches.html')
 
-@app.route('/pitches/<category>')
+@main.route('/pitches/<category>')
 def categories(category):
     return render_template('categories.html')
