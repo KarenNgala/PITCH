@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+<!-- head -->
+{% block title %} PITCH | Comments {% endblock %}
+
+<!-- style -->
+{% block head%} {{ super() }}
+<style>
+    p {
+        color: red;
+    }
+</style>
+{% endblock %}
+
+<!-- content -->
+<div class="container">
+    {% block content %}
+    <p>COMMENTS</p>
+    {% endblock %}
+</div>
