@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+<!-- head -->
+{% block title %} PITCH | Profile {% endblock %}
+
+
+<!-- content -->
+<div class="container">
+    {% block content %}
+    <h3> {{user.username| capitalize}} </h3>
+
+    <!--Displaying user bio-->
+    {% if user.about %}
+    <p> {{user.about}}</p>
+    {%else%}
+    <p> {{user.username| capitalize}} has no bio </p>
+    {% endif %}
+    <!-- edit -->
+    {% if user == current_user %}
+    <a href="{{url_for('main.edit_profile',name=user.username)}}">Edit profile</a> {% endif %}
+</div>
+
+<!--Display profile photo-->
+<div class="col-md-4">
+
+    {% if user.profile_pic_path %}
+    <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail"> {%else%}
+    <p>No profile picture</p>
+    {% endif %} {% endblock %}
+</div>
