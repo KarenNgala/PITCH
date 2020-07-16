@@ -30,9 +30,10 @@ def pitch_form():
     return render_template('new_pitch.html', pitch_form=form)
 
 
-@main.route('/pitches/<category>')
-def categories(category):
-    return render_template('categories.html')
+@main.route('/pitches/<pitch_category>')
+def categories(pitch_category):
+    pitch = Pitches.get_category(pitch_category)
+    return render_template('categories.html', pitch=pitch)
 
 
 @main.route('/comments')

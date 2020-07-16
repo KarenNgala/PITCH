@@ -1,6 +1,4 @@
 {% extends 'base.html' %}
 
 <!-- content -->
-{% block content %}
-<p>Pitches by category</p>
-{% endblock %}
+{% block content %} {% if pitch %} {%for item in pitch %} {{item.text}} {% endfor %} {% endif %} {% endblock %}
