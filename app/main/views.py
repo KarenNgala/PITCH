@@ -1,8 +1,8 @@
 from . import main
 from flask import render_template, request, redirect, url_for, abort
-from ..models import User
-from flask_login import login_required
-from .forms import EditProfile
+from ..models import User, Pitches
+from flask_login import login_required, current_user
+from .forms import EditProfile, PitchForm
 from .. import db, photos
 
 
@@ -13,7 +13,21 @@ def landing_page():
 
 @main.route('/pitches')
 def home():
-    return render_template('pitches.html')
+    pitches=Pitches.query.all()
+    return render_template('pitches.html', pitches=pitches)
+
+
+@main.route('/pitch/new', methods=['GET','POST'])
+@login_required
+def pitch_form():
+    form = PitchForm()
+    if form.validate_on_submit():
+        category=form.pitch_category.data
+        text = form.pitch_text.data
+        new_pitch = Pitches(category=category, text=text, user=current_user)
+        new_pitch.save_pitch()
+        return redirect(url_for('main.home'))
+    return render_template('new_pitch.html', pitch_form=form)
 
 
 @main.route('/pitches/<category>')

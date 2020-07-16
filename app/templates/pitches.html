@@ -2,5 +2,6 @@
 
 <!-- content -->
 {% block content %}
-<p>All pitches</p>
-{% endblock %}
+
+<!-- pitches -->
+{% if pitches %} {% for item in pitches %} {{item.text}} ~ {{item.user}} {% endfor %} {% endif %} {% endblock %}
