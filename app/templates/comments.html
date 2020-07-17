@@ -1,20 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% import 'bootstrap/wtf.html' as wtf%}
 
 <!-- head -->
 {% block title %} PITCH | Comments {% endblock %}
 
-<!-- style -->
-{% block head%} {{ super() }}
-<style>
-    p {
-        color: red;
-    }
-</style>
-{% endblock %}
 
 <!-- content -->
 <div class="container">
     {% block content %}
-    <p>COMMENTS</p>
+    <div class="row">
+        <div class="col-md-6">
+            {% if comments %} {% for item in comments %} {{item.comment}} ~ {{item.user_id}} {% endfor %} {% endif %}
+        </div>
+        <div class="col-md-6">
+            {{wtf.quick_form(comment_form)}}
+        </div>
+    </div>
     {% endblock %}
 </div>

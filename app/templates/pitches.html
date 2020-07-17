@@ -4,4 +4,6 @@
 {% block content %}
 
 <!-- pitches -->
-{% if pitches %} {% for item in pitches %} {{item.text}} ~ {{item.user}} {% endfor %} {% endif %} {% endblock %}
+{% if pitches %} {% for item in pitches %} {{item.text}} ~ {{item.user}}
+<!-- comments -->
+<a href="/comments/{{item.id}}">Comments</a> {% endfor %} {% endif %} {% endblock %}

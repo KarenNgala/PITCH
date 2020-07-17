@@ -1,8 +1,8 @@
 from . import main
 from flask import render_template, request, redirect, url_for, abort
-from ..models import User, Pitches
+from ..models import User, Pitches, Comments
 from flask_login import login_required, current_user
-from .forms import EditProfile, PitchForm
+from .forms import EditProfile, PitchForm, CommentForm
 from .. import db, photos
 
 
@@ -36,10 +36,19 @@ def categories(pitch_category):
     return render_template('categories.html', pitch=pitch)
 
 
-@main.route('/comments')
+@main.route('/comments/<int:pitch_id>', methods=['GET','POST'])
 @login_required
-def comments():
-    return render_template('comments.html')
+def pitch_comments(pitch_id):
+    comments = Comments.get_comments(pitch_id)
+    pitch = Pitches.query.get(pitch_id)
+
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = form.pitch_comment.data
+        new_comment = Comments(comment=comment, pitch_id=pitch_id, user_id=current_user.get_id())
+        new_comment.save_comment()
+        return redirect(url_for('main.pitch_comments',pitch_id = pitch_id))
+    return render_template('comments.html', comment_form=form, comments=comments, pitch = pitch)
 
 
 @main.route('/user/<name>')

@@ -19,6 +19,8 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String())
     password_encrypt=db.Column(db.String(128))
     pitches = db.relationship('Pitches', backref='user', lazy='dynamic')
+    comments = db.relationship('Comments', backref='comments', lazy='dynamic')
+
 
     @property   #write-only
     def password(self):
@@ -42,6 +44,7 @@ class Pitches(db.Model):
     text = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     posted = db.Column(db.DateTime, default=datetime.utcnow)
+    comments = db.relationship('Comments', backref='pitch', lazy='dynamic')
 
     def save_pitch(self):
         db.session.add(self)
@@ -54,3 +57,22 @@ class Pitches(db.Model):
 
     def __repr__(self):
         return f'Pitches{self.text}'
+
+class Comments(db.Model):
+    __tablename__='comments'
+    id = db.Column(db.Integer, primary_key=True)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    comment = db.Column(db.String(), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls,pitch_id):
+        comments = Comments.query.filter_by(pitch_id=pitch_id)
+        return comments
+    
+    def __repr__(self):
+        return f'Comments:{self.comment}'
