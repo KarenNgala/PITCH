@@ -1,6 +1,6 @@
 from . import main
 from flask import render_template, request, redirect, url_for, abort
-from ..models import User, Pitches, Comments, UpVotes, DownVotes
+from ..models import User, Pitches, Comments, UpVote
 from flask_login import login_required, current_user
 from .forms import EditProfile, PitchForm, CommentForm
 from .. import db, photos
@@ -14,13 +14,6 @@ def home():
     user = User.query.filter_by(id=current_user.get_id()).first()
 
     return render_template('pitches.html', pitches=pitches, posted_by=posted_by, user=user)
-
-
-@main.route('/voting')
-@login_required
-def voting():
-
-    return render_template('pitches.html', votes = votes)
 
 
 @main.route('/new_pitch', methods=['GET','POST'])
@@ -50,8 +43,6 @@ def categories(pitch_category):
 def pitch_comments(pitch_id):
     comments = Comments.get_comments(pitch_id)
 
-    identity = current_user.get_id()
-    posted_by = User.query.filter_by(id=identity).first()
     pitch = Pitches.query.get(pitch_id)
     pitch_posted_by = pitch.user_id
     user = User.query.filter_by(id=pitch_posted_by).first()
@@ -59,11 +50,11 @@ def pitch_comments(pitch_id):
     form = CommentForm()
     if form.validate_on_submit():
         comment = form.pitch_comment.data      
-        new_comment = Comments(comment=comment, pitch_id=pitch_id, user_id=identity)
+        new_comment = Comments(comment=comment, pitch_id=pitch_id, user_id=current_user.get_id())
         new_comment.save_comment()
         return redirect(url_for('main.pitch_comments',pitch_id = pitch_id))
 
-    return render_template('comments.html', comment_form=form, comments=comments, pitch = pitch, posted_by=posted_by, user=user)
+    return render_template('comments.html', comment_form=form, comments=comments, pitch = pitch, user=user)
 
 
 @main.route('/user/<name>', methods=['GET','POST'])

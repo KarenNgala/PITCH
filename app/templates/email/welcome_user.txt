@@ -1,5 +1,5 @@
 Hi, {{user.username}}
-With Pitch, you can create new elevator pitches or even, pickup limes...sorry, lines. 
+With Pitch, you can create new elevator pitches or even, pickup lines and puns. 
 Leave feedback on pitches and upvote or downvote them.
 We are thrilled to have you on board.
 
