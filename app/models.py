@@ -19,6 +19,8 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String())
     password_encrypt=db.Column(db.String(128))
     pitches = db.relationship('Pitches', backref='user', lazy='dynamic')
+    likes = db.relationship('UpVotes', backref='user', lazy='dynamic')
+    dislikes = db.relationship('DownVotes', backref='user', lazy='dynamic')
     comments = db.relationship('Comments', backref='comments', lazy='dynamic')
 
 
@@ -40,11 +42,13 @@ class User(UserMixin, db.Model):
 class Pitches(db.Model):
     __tablename__='pitches'
     id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String)
+    category = db.Column(db.String(255))
     text = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     posted = db.Column(db.DateTime, default=datetime.utcnow)
     comments = db.relationship('Comments', backref='pitch', lazy='dynamic')
+    likes = db.relationship('UpVotes', backref='pitch', lazy='dynamic')
+    dislikes = db.relationship('DownVotes', backref='pitch', lazy='dynamic')
 
     def save_pitch(self):
         db.session.add(self)
@@ -57,6 +61,26 @@ class Pitches(db.Model):
 
     def __repr__(self):
         return f'Pitches{self.text}'
+
+
+class UpVotes(db.Model):
+    __tablename__='likes'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+
+    def __repr__(self):
+        return f'Pitches{self.id}'
+
+
+class DownVotes(db.Model):
+    __tablename__='dislikes'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+
+    def __repr__(self):
+        return f'Pitches{self.id}'
 
 class Comments(db.Model):
     __tablename__='comments'
